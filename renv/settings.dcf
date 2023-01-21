@@ -1,0 +1,12 @@
+bioconductor.version:
+external.libraries:
+ignored.packages: docthis, clipr, datapasta, namer, styler, wordcountaddin,
+    togglr, citr, carbonate, reprex, breakerofchains, prompt, crayon,
+    clisymbols, devtools, usethis
+package.dependency.fields: Imports, Depends, LinkingTo
+r.version:
+snapshot.type: implicit
+use.cache: TRUE
+vcs.ignore.cellar: TRUE
+vcs.ignore.library: TRUE
+vcs.ignore.local: TRUE
