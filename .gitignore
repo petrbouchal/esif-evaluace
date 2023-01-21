@@ -2,3 +2,4 @@
 
 /.quarto/
 data-input/Evaluace.xml
+data-interim/*.rds
