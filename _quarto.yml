@@ -1,0 +1,28 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "esif-evaluace"
+  search: false
+  navbar:
+    false
+
+format:
+  html:
+    theme: cosmo
+    css: style.css
+    toc: false
+
+execute:
+  echo: false
+  message: false
+  warning: false
+
+lang: cs
+language:
+  title-block-published: "Aktualizováno"
+
+
+
+

@@ -1,0 +1,231 @@
+---
+title: "Knihovna evaluací: alternativní rozhraní"
+subtitle: Evaluace 2014-2023
+date: today
+---
+
+```{r setup}
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(stringr)
+library(reactable)
+library(crosstalk)
+library(readr)
+library(htmltools)
+```
+
+```{r}
+evals_all0 <- read_rds("data-interim/evals_all.rds")
+evals_all <- evals_all0 |> 
+  arrange(eval_ma_vystup_txt, desc(etapa_ukon_datum)) |> 
+  mutate(etapa_stav = as.factor(etapa_stav)) |> 
+  select(op_zkratka,
+         eval_lbl,
+         eval_nazev, 
+         etapa_nazev, 
+         etapa_ukon_rok, 
+         etapa_ukon_datum,
+         etapa_stav, 
+         etapa_ukon_rok,
+         eval_popis,
+         
+         file_url,
+         file_text,
+         
+         etapa_kod,
+         etapa_popis,
+         etapa_komentar,
+         
+         eval_ma_vystup_txt,
+         eval_ma_etapy_txt,
+         eval_ma_etapy_ukoncene_txt,
+         
+         eval_is_impact_txt,
+         
+         eval_zamereni_vyber,
+         eval_typ_faze,
+         eval_typ_hledisko
+  )
+```
+
+
+
+```{r}
+data <- SharedData$new(evals_all)
+```
+
+```{r}
+row_detail <- function(index) {
+  
+  eval_field <- function(name, ...) {
+    if (any(is.na(...))) NULL
+    else tagList(span(class = "detail-label", name), ...)
+  }
+  
+  dt <- data$data()[index,]
+  
+  etapa_id <- unique(dt$etapa_kod)
+  
+  dt_all <- data$data()
+  
+  data_sub <- dt_all[dt_all$etapa_kod == etapa_id,]
+  
+  rtrn <- tagList(
+    tags$div(
+      tags$details(tags$div(dt$eval_popis, tags$br(), 
+                            paste0("Zaměření evaluace: ", 
+                                   if(!is.na(dt$eval_typ_hledisko)) dt$eval_typ_hledisko else "nezadáno")), 
+                   tags$summary(paste("Detail evaluace: ", dt$eval_nazev))),
+      class = "popis-evaluace"
+    ),
+    if(any(!is.na(dt$etapa_nazev))) {
+      
+      tags$div(
+        tags$h5(eval_field("Etapa: ", dt$etapa_nazev)),
+        tags$br(),
+        eval_field(tags$b("Datum dokončení: "), if(!is.na(dt$etapa_ukon_datum)) ptrr::format_date_human(dt$etapa_ukon_datum) else NA),
+        tags$br(),
+        tags$br(),
+        tags$br(),
+        eval_field(tags$div(tags$b("Popis etapy")), dt$etapa_popis),
+        tags$br(),
+        tags$br(),
+        eval_field(tags$div(tags$b("Komentář")), dt$etapa_komentar),
+        tags$br(),
+        tags$br(),
+        if(any(!is.na(data_sub$file_url))) tags$b("Zprávy ke stažení") else NULL,
+        tags$ul(
+          
+          purrr::map2(data_sub$file_url, data_sub$file_text, function(x, y) 
+            if(is.na(x)) NULL else tags$li(tags$a(y, href = x)))
+        ),
+        class = "popis-etapy"
+      )
+    } else {NULL}
+  )
+  
+  return(rtrn)
+}
+```
+
+```{r}
+#| column: margin
+
+tagList(
+  filter_slider("datum", "Datum dokončení etapy", data, ~etapa_ukon_datum, timeFormat = "%Y", ticks = FALSE),
+  filter_select("op", "Operační program", data, ~op_zkratka),
+  div(tags$b("Evaluace")),
+  filter_checkbox("ma_etapy", "Zadané etapy", data, ~eval_ma_etapy_txt, columns = 2),
+  filter_checkbox("ma_etapy_dokoncene", "Má dokončené etapy", data, ~eval_ma_etapy_ukoncene_txt, columns = 2),
+  filter_select("typ", "Typ evaluace", data, ~eval_zamereni_vyber),
+  filter_checkbox("cil_evaluace", "Cíl evaluace", data, ~eval_is_impact_txt, columns = 2),
+  filter_checkbox("faze", "Evaluace podle fáze hodnocení", data, ~eval_typ_faze, columns = 2),
+  div(tags$b("Etapa")),
+  filter_checkbox("ma_vystup", "Zpráva ke stažení", data, ~eval_ma_vystup_txt, columns = 2),
+  filter_checkbox("stav", "Stav etapy", data, ~etapa_stav, columns = 1)
+)
+
+```
+
+```{r}
+#| column: page-left
+tbl <- reactable(data, minRows = 1, filterable = TRUE, searchable = TRUE,  
+                 # groupBy = c("eval_nazev", "eval_popis"), 
+                 compact = TRUE,
+                 defaultColDef = colDef(headerClass = "header"),
+                 details = row_detail,
+                 columns = list(
+                   op_zkratka = colDef(name = "OP", width = 100, filterable = TRUE, show = FALSE, aggregate = "unique"),
+                   eval_ma_etapy_ukoncene_txt = colDef(show = FALSE),
+                   eval_ma_etapy_txt = colDef(show = FALSE),
+                   
+                   eval_ma_vystup_txt = colDef(show = FALSE),
+                   eval_is_impact_txt = colDef(show = FALSE),
+                   
+                   eval_zamereni_vyber = colDef(show = FALSE),
+                   eval_nazev = colDef(show = FALSE, name = "OP a Název evaluace (v závorce počet etap)",
+                                       cell = function(value) {
+                                         span(title = value, value)
+                                       }),
+                   eval_lbl = colDef(show = TRUE, name = "Název evaluace (v závorce počet etap)"),
+                   eval_popis = colDef(show = FALSE),
+                   eval_typ_faze = colDef(show = FALSE),
+                   eval_typ_hledisko = colDef(show = FALSE),
+                   
+                   file_url = colDef(show = FALSE),
+                   file_text = colDef(show = FALSE),
+                   
+                   etapa_nazev = colDef(show = TRUE, searchable = TRUE, width = 300, name = "Etapy", aggregate = "count"),
+                   etapa_ukon_rok = colDef(show = FALSE),
+                   etapa_kod = colDef(show = FALSE),
+                   etapa_ukon_datum = colDef(show = FALSE),
+                   etapa_popis = colDef(show = FALSE, searchable = TRUE),
+                   etapa_komentar = colDef(show = FALSE, searchable = TRUE),
+                   # etapa_stav = colDef(filterInput = function(values, name) {
+                   #   tags$select(
+                   #     # Set to undefined to clear the filter
+                   #     onchange = sprintf("Reactable.setFilter('cars-select', '%s', event.target.value || undefined)", name),
+                   #     # "All" has an empty value to clear the filter, and is the default option
+                   #     tags$option(value = "", "All"),
+                   #     lapply(unique(values), tags$option),
+                   #     "aria-label" = sprintf("Filter %s", name),
+                   #     style = "width: 100%; height: 28px;"
+                   #   )
+                   # }),
+                   etapa_stav = colDef(show = FALSE)
+                 ),
+                 groupBy = c("eval_lbl"),
+                 theme = reactableTheme(
+                   style = list("font-size" = 12),
+                   headerStyle = list(
+                     "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
+                     "&[aria-sort='ascending'], &[aria-sort='descending']" = list(background = "hsl(0, 0%, 96%)"),
+                     borderColor = "#555"
+                   )),
+                 showSortable = TRUE,
+                 elementId = "cars-select", 
+                 language = reactableLang(searchPlaceholder = "Hledat ve všech textech"),
+                 defaultPageSize = 20,
+                 showPageSizeOptions = TRUE,
+                 pageSizeOptions = c(10, 20, 50, 100),
+                 onClick = "expand",
+                 class = "evaluace-tabulka",
+                 resizable = TRUE
+)
+```
+
+::: {.callout-tip collapse="true"}
+## Co tu je a jak to použít
+
+Toto je alternativní rozhraní [knihovny evaluací ESI fondů](https://dotaceeu.cz/cs/evropske-fondy-v-cr/narodni-organ-pro-koordinaci/evaluace/knihovna-evaluaci?Text=&Category1=0&Category2=0&Category3=0&Category4=0&Category5=0).
+
+#### Co tu je 
+
+- Evaluace je sbírkou etap. 
+- Evaluace má svůj typ atd., ale datum a stav realizace je zanesen u jednotlivých etap
+- Výstupy (zprávy, dokumenty) jsou uvedeny u jednotlivých etap
+- Na rozdíl od oficiální knihovny tady najdete jen evaluace od roku 2014 dál.
+
+#### Jak to použít
+
+- V pravém sloupci zvolte, jaké evaluace a etapy chcete vidět v tabulce
+- Můžete textově filtrovat v tabulce
+  - nebo vyhledávat ve všech textech názvů a popisů etap a evaluací (ale ne výstypů)
+- V tabulce rozbalte tlačítkem ⦾ evaluaci
+- Následně opět tlačítkem ⦾ rozbalte detaily etapy - tam najdete i odkazy na výstupy
+
+Etapy s nejčerstvějšími výstupy se zobrazují první, ale řazení můžete změnit.
+
+:::
+
+```{r}
+div(class = "evaluace-tabulka-div",
+    # h2(class = "title", "Evaluace 2014-2023"),
+    tbl
+)
+
+# https://glin.github.io/reactable/articles/cran-packages/cran-packages.html
+```
+
+
