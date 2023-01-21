@@ -129,7 +129,6 @@ tagList(
 ```
 
 ```{r}
-#| column: page-left
 tbl <- reactable(data, minRows = 1, filterable = TRUE, searchable = TRUE,  
                  # groupBy = c("eval_nazev", "eval_popis"), 
                  compact = TRUE,
@@ -195,6 +194,8 @@ tbl <- reactable(data, minRows = 1, filterable = TRUE, searchable = TRUE,
 )
 ```
 
+:::: column-page-left
+
 ::: {.callout-tip collapse="true"}
 ## Co tu je a jak to použít
 
@@ -219,7 +220,10 @@ Etapy s nejčerstvějšími výstupy se zobrazují první, ale řazení můžete
 
 :::
 
+::::
+
 ```{r}
+#| column: page-left
 div(class = "evaluace-tabulka-div",
     # h2(class = "title", "Evaluace 2014-2023"),
     tbl
