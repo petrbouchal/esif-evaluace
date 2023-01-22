@@ -4,9 +4,9 @@ project:
 
 website:
   title: "esif-evaluace"
+  # page-footer: Kód
   search: false
-  navbar:
-    false
+  navbar: false
 
 format:
   html:
