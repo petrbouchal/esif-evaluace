@@ -128,6 +128,12 @@ tagList(
 
 ```
 
+
+::: {.column-margin}
+---
+Kód na Githubu: <br />[petrbouchal/esif-evaluace](https://github.com/petrbouchal/esif-evaluace)
+:::
+
 ```{r}
 tbl <- reactable(data, minRows = 1, filterable = TRUE, searchable = TRUE,  
                  # groupBy = c("eval_nazev", "eval_popis"), 
@@ -147,7 +153,9 @@ tbl <- reactable(data, minRows = 1, filterable = TRUE, searchable = TRUE,
                                        cell = function(value) {
                                          span(title = value, value)
                                        }),
+                   
                    eval_lbl = colDef(show = TRUE, name = "Název evaluace (v závorce počet etap)"),
+                   
                    eval_popis = colDef(show = FALSE),
                    eval_typ_faze = colDef(show = FALSE),
                    eval_typ_hledisko = colDef(show = FALSE),
@@ -174,8 +182,9 @@ tbl <- reactable(data, minRows = 1, filterable = TRUE, searchable = TRUE,
                    # }),
                    etapa_stav = colDef(show = FALSE)
                  ),
-                 groupBy = c("eval_lbl"),
+                 groupBy = c("eval_lbl"), 
                  theme = reactableTheme(
+                   # rowStyle = list(minHeight = 58.625),
                    style = list("font-size" = 12),
                    headerStyle = list(
                      "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
@@ -184,8 +193,13 @@ tbl <- reactable(data, minRows = 1, filterable = TRUE, searchable = TRUE,
                    )),
                  showSortable = TRUE,
                  elementId = "cars-select", 
-                 language = reactableLang(searchPlaceholder = "Hledat ve všech textech"),
-                 defaultPageSize = 20,
+                 language = reactableLang(searchPlaceholder = "Hledat ve všech textech", 
+                                          pageNext = "Další stránka", 
+                                          noData = "Nic nenalezeno",
+                                          pageSizeOptions = "Zobrazit {rows}",
+                                          pageInfo = "Řádky {rowStart}\u2013{rowEnd} z {rows}",
+                                          pagePrevious = "Předchozí stránka", ),
+                 defaultPageSize = 15,
                  showPageSizeOptions = TRUE,
                  pageSizeOptions = c(10, 20, 50, 100),
                  onClick = "expand",
@@ -231,5 +245,4 @@ div(class = "evaluace-tabulka-div",
 
 # https://glin.github.io/reactable/articles/cran-packages/cran-packages.html
 ```
-
 
