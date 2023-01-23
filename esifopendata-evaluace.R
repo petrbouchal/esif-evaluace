@@ -139,3 +139,45 @@ write_rds(evals_df, "data-interim/evals.rds")
 etapy_df |> filter(etapa_kod == "10.003.01") |> select(starts_with("zamereni"))
 gt::gt(etapy_df[c("etapa_kod", "zamereni_vyber", "zamereni_popis")])
 
+evals_for_table <- evals_all |>
+  group_by(eval_kod) |>
+  mutate(pocet_etap = n()) |>
+  ungroup() |>
+  filter(!is.na(etapa_nazev) | pocet_etap == 1) |>
+  arrange(eval_ma_vystup_txt, desc(etapa_ukon_datum)) |>
+  mutate(etapa_stav = as.factor(etapa_stav)) |>
+  select(op_zkratka,
+         etapa_kod,
+         eval_lbl,
+         eval_nazev,
+         etapa_nazev,
+         etapa_ukon_rok,
+         etapa_ukon_datum,
+         etapa_stav,
+         etapa_ukon_rok,
+         eval_popis,
+
+         file_url,
+         file_text,
+         link,
+
+         etapa_kod,
+         etapa_popis,
+         etapa_komentar,
+
+         eval_ma_vystup_txt,
+         eval_ma_etapy_txt,
+         eval_ma_etapy_ukoncene_txt,
+
+         eval_is_impact_txt,
+
+         eval_zamereni_vyber,
+         eval_typ_faze,
+         eval_typ_hledisko
+  ) |>
+  group_by(etapa_kod) |>
+  nest(odkazy = c(file_url, file_text, link)) |>
+  ungroup() |>
+  select(-etapa_ukon_rok)
+
+write_rds(evals_for_table, "data-interim/evals_for_table.rds")
