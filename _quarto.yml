@@ -1,6 +1,7 @@
 project:
   type: website
   output-dir: docs
+  resources: [evaluace.xlsx, .nojekyll]
 
 website:
   title: "esif-evaluace"

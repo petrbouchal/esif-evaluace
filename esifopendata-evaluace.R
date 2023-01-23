@@ -1,6 +1,7 @@
 library(tidyverse)
 library(xml2)
 library(lubridate)
+library(writexl)
 
 ciselniky_xml <- read_xml("https://ms14opendata.mssf.cz/MatDat.xml")
 
@@ -181,3 +182,4 @@ evals_for_table <- evals_all |>
   select(-etapa_ukon_rok)
 
 write_rds(evals_for_table, "data-interim/evals_for_table.rds")
+write_xlsx(evals_for_table |> unnest(odkazy), "evaluace.xlsx")

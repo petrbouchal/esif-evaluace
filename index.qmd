@@ -109,6 +109,10 @@ tagList(
 ::: {.column-margin}
 ---
 Kód na Githubu: <br />[petrbouchal/esif-evaluace](https://github.com/petrbouchal/esif-evaluace)
+
+<br />
+
+[Všechna data (.xlsx)](evaluace.xlsx) <br /> (co řádek, to odkaz na výstup)
 :::
 
 ```{r}
