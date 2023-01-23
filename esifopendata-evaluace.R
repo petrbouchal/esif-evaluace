@@ -62,8 +62,8 @@ etapy_df0 <- tibble(
   unnest_wider(data, simplify = TRUE,
                names_repair = janitor::make_clean_names,
                transform = unlist) |>
-  select(-starts_with("prilohy"), -starts_with("zamereni")) |>
-  hoist(data2, prilohy = "PRILOHY",
+  select(-starts_with("zamereni")) |>
+  hoist(data2,
         zamereni = "ZAMERENI") |>
   select(-data2) |>
   # mutate(zamereni = map(zamereni, 1)) |>
@@ -74,12 +74,20 @@ etapy_df0 <- tibble(
         zamereni_popis = "POPIS", .simplify = TRUE) |>
   mutate(across(starts_with("zamereni_"), \(x) map_chr(x, handle_null2)))
 
+
+
 etapy_df0 |>
   count(map_int(prilohy, length))
 
-prilohy_df <- etapy_df0 |>
-  select(etapa_kod, prilohy) |>
-  unnest_wider(prilohy, names_repair = janitor::make_clean_names)
+links_df <- etapy_df0 |>
+  select(etapa_kod, starts_with("prilohy")) |>
+  pivot_longer(starts_with("prilohy"), names_to = "priloha_nazev", values_to = "priloha_data") |>
+  select(-priloha_nazev) |>
+  filter(lengths(priloha_data) > 0) |>
+  hoist(.col = priloha_data,
+        linkdms = "LINKDMS",
+        link = "LINK",
+        nazpril = "NAZPRIL", .remove = TRUE)
 
 
 etapy_df <- etapy_df0 |>
@@ -87,17 +95,6 @@ etapy_df <- etapy_df0 |>
   mutate(datumukonrealskut = as.Date(datumukonrealskut),
          rok_ukonceni = year(datumukonrealskut)) |>
   rename(popis_etapy = popis)
-
-prilohy_df |>
-  count(map_int(linkdms, length))
-
-links_df <- prilohy_df |>
-  unnest_longer(col = c(linkdms, nazpril, link), names_repair = janitor::make_clean_names)
-
-links_df |>
-  drop_na(linkdms) |>
-  count(etapa_kod) |>
-  count(n)
 
 evals_all <- evals_df |>
   full_join(etapy_df, by = "etapa_kod") |>
