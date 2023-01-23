@@ -19,9 +19,14 @@ library(tidyr)
 ```{r}
 evals_all0 <- read_rds("data-interim/evals_all.rds")
 evals_all <- evals_all0 |> 
+  group_by(eval_kod) |> 
+  mutate(pocet_etap = n()) |> 
+  ungroup() |> 
+  filter(!is.na(etapa_nazev) | pocet_etap == 1) |> 
   arrange(eval_ma_vystup_txt, desc(etapa_ukon_datum)) |> 
   mutate(etapa_stav = as.factor(etapa_stav)) |> 
   select(op_zkratka,
+         etapa_kod,
          eval_lbl,
          eval_nazev, 
          etapa_nazev, 
@@ -33,6 +38,7 @@ evals_all <- evals_all0 |>
          
          file_url,
          file_text,
+         link,
          
          etapa_kod,
          etapa_popis,
@@ -48,7 +54,10 @@ evals_all <- evals_all0 |>
          eval_typ_faze,
          eval_typ_hledisko
   ) |> 
-  nest(odkazy = c(file_url, file_text))
+  group_by(etapa_kod) |> 
+  nest(odkazy = c(file_url, file_text, link)) |> 
+  ungroup() |> 
+  select(-etapa_ukon_rok)
 ```
 
 
