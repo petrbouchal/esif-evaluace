@@ -91,7 +91,7 @@ links_df <- etapy_df0 |>
 
 
 etapy_df <- etapy_df0 |>
-  select(-prilohy) |>
+  select(-starts_with("prilohy")) |>
   mutate(datumukonrealskut = as.Date(datumukonrealskut),
          rok_ukonceni = year(datumukonrealskut)) |>
   rename(popis_etapy = popis)

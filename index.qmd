@@ -181,10 +181,11 @@ tbl <- reactable(data, minRows = 1, filterable = TRUE, searchable = TRUE,
                    file_url = colDef(show = FALSE),
                    file_text = colDef(show = FALSE),
                    
-                   etapa_nazev = colDef(show = TRUE, searchable = TRUE, width = 300, name = "Etapy", aggregate = "count"),
-                   etapa_ukon_rok = colDef(show = FALSE),
+                   etapa_nazev = colDef(show = TRUE, searchable = TRUE, name = "Etapy", aggregate = "count"),
+                   # etapa_ukon_rok = colDef(show = FALSE),
                    etapa_kod = colDef(show = FALSE),
-                   etapa_ukon_datum = colDef(show = FALSE),
+                   etapa_ukon_datum = colDef(show = TRUE, aggregate = "max", maxWidth = 130, name = "Ukončení poslední etapy",
+                                             defaultSortOrder = "desc", format = colFormat(date = TRUE, locales = "cs-CZ")),
                    etapa_popis = colDef(show = FALSE, searchable = TRUE),
                    etapa_komentar = colDef(show = FALSE, searchable = TRUE),
                    # etapa_stav = colDef(filterInput = function(values, name) {
@@ -203,6 +204,7 @@ tbl <- reactable(data, minRows = 1, filterable = TRUE, searchable = TRUE,
                  groupBy = c("eval_lbl"), 
                  theme = reactableTheme(
                    # rowStyle = list(minHeight = 58.625),
+                   rowStyle = list(cursor = "pointer"),
                    style = list("font-size" = 12),
                    headerStyle = list(
                      "&:hover[aria-sort]" = list(background = "hsl(0, 0%, 96%)"),
