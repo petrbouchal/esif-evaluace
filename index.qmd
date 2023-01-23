@@ -13,6 +13,7 @@ library(reactable)
 library(crosstalk)
 library(readr)
 library(htmltools)
+library(tidyr)
 ```
 
 ```{r}
@@ -46,7 +47,8 @@ evals_all <- evals_all0 |>
          eval_zamereni_vyber,
          eval_typ_faze,
          eval_typ_hledisko
-  )
+  ) |> 
+  nest(odkazy = c(file_url, file_text))
 ```
 
 
@@ -71,6 +73,10 @@ row_detail <- function(index) {
   
   data_sub <- dt_all[dt_all$etapa_kod == etapa_id,]
   
+  odkazy <- data_sub |> 
+    select(odkazy) |> 
+    unnest(odkazy)
+  
   rtrn <- tagList(
     tags$div(
       tags$details(tags$div(dt$eval_popis, tags$br(), 
@@ -94,10 +100,10 @@ row_detail <- function(index) {
         eval_field(tags$div(tags$b("Komentář")), dt$etapa_komentar),
         tags$br(),
         tags$br(),
-        if(any(!is.na(data_sub$file_url))) tags$b("Zprávy ke stažení") else NULL,
+        if(any(nrow(odkazy) > 0)) tags$b("Zprávy ke stažení") else NULL,
         tags$ul(
           
-          purrr::map2(data_sub$file_url, data_sub$file_text, function(x, y) 
+          purrr::map2(odkazy$file_url, odkazy$file_text, function(x, y) 
             if(is.na(x)) NULL else tags$li(tags$a(y, href = x)))
         ),
         class = "popis-etapy"
