@@ -112,8 +112,10 @@ row_detail <- function(index) {
         if(any(nrow(odkazy) > 0)) tags$b("Zprávy ke stažení") else NULL,
         tags$ul(
           
-          purrr::map2(odkazy$file_url, odkazy$file_text, function(x, y) 
-            if(is.na(x)) NULL else tags$li(tags$a(y, href = x)))
+          purrr::pmap(list(odkazy$file_url, odkazy$file_text, odkazy$link), function(x, y, link) 
+            if(is.na(x)) NULL else tags$li(tags$a(y, href = x), 
+                                           if(!is.na(link)) tagList(tags$span(" + "), 
+                                                                    tags$a("dodatečný odkaz", href = link))))
         ),
         class = "popis-etapy"
       )
@@ -174,6 +176,7 @@ tbl <- reactable(data, minRows = 1, filterable = TRUE, searchable = TRUE,
                    eval_popis = colDef(show = FALSE),
                    eval_typ_faze = colDef(show = FALSE),
                    eval_typ_hledisko = colDef(show = FALSE),
+                   odkazy = colDef(show = FALSE),
                    
                    file_url = colDef(show = FALSE),
                    file_text = colDef(show = FALSE),
