@@ -16,22 +16,27 @@ library(htmltools)
 library(tidyr)
 ```
 
-```{r}
+```{r load}
 evals_all <- read_rds("data-interim/evals_for_table.rds")
 ```
 
 
 
-```{r}
+```{r crosstalk}
 data <- SharedData$new(evals_all)
 ```
 
-```{r}
+```{r detail-fun}
 row_detail <- function(index) {
   
   eval_field <- function(name, ...) {
     if (any(is.na(...))) NULL
-    else tagList(span(class = "detail-label", name), ...)
+    else tagList(tags$div(class = "detail-heading", span(class = "detail-label", name), ...))
+  }
+  eval_block <- function(name, ...) {
+    if (any(is.na(...))) NULL
+    else tagList(tags$div(class = "detail-heading", span(class = "detail-label", name)),
+                 tags$div(..., class = "popis-etapy-text"))
   }
   
   dt <- data$data()[index,]
@@ -48,36 +53,31 @@ row_detail <- function(index) {
   
   rtrn <- tagList(
     tags$div(
-      tags$details(tags$div(dt$eval_popis, tags$br(), 
-                            paste0("Zaměření evaluace: ", 
-                                   if(!is.na(dt$eval_typ_hledisko)) dt$eval_typ_hledisko else "nezadáno")), 
-                   tags$summary(paste("Detail evaluace: ", dt$eval_nazev))),
-      class = "popis-evaluace"
+      class = "popis-evaluace-box",
+      tags$details(tags$div(tags$span("Popis: "), dt$eval_popis, class = "popis-evaluace"),
+                   tags$div(paste0("Zaměření evaluace: ", 
+                                   if(!is.na(dt$eval_typ_hledisko)) dt$eval_typ_hledisko else "nezadáno"),
+                            class = "zamereni-evaluace"), 
+                   tags$summary(paste("Detail evaluace: ", dt$eval_nazev)),
+                   style = "margin-bottom: 0px")
     ),
     if(any(!is.na(dt$etapa_nazev))) {
       
       tags$div(
+        class = "popis-etapy-box",
         tags$h5(eval_field("Etapa: ", dt$etapa_nazev)),
-        tags$br(),
-        eval_field(tags$b("Datum dokončení: "), if(!is.na(dt$etapa_ukon_datum)) ptrr::format_date_human(dt$etapa_ukon_datum) else NA),
-        tags$br(),
-        tags$br(),
-        tags$br(),
-        eval_field(tags$div(tags$b("Popis etapy")), dt$etapa_popis),
-        tags$br(),
-        tags$br(),
-        eval_field(tags$div(tags$b("Komentář")), dt$etapa_komentar),
-        tags$br(),
-        tags$br(),
-        if(any(nrow(odkazy) > 0)) tags$b("Zprávy ke stažení") else NULL,
-        tags$ul(
+        eval_field("Datum dokončení: ", if(!is.na(dt$etapa_ukon_datum)) ptrr::format_date_human(dt$etapa_ukon_datum) else NA),
+        eval_block("Popis etapy", dt$etapa_popis),
+        eval_block("Komentář", dt$etapa_komentar),
+        if(nrow(odkazy) > 1) tags$div("Zprávy ke stažení", class = "detail-label") else NULL,
+        tags$div(
           
           purrr::pmap(list(odkazy$file_url, odkazy$file_text, odkazy$link), function(x, y, link) 
-            if(is.na(x)) NULL else tags$li(tags$a(y, href = x), 
+            if(is.na(x)) NULL else tags$div(tags$a(y, href = x), 
                                            if(!is.na(link)) tagList(tags$span(" + "), 
-                                                                    tags$a("dodatečný odkaz", href = link))))
-        ),
-        class = "popis-etapy"
+                                                                    tags$a("dodatečný odkaz", href = link)),
+                                           class = "link"))
+        )
       )
     } else {NULL}
   )
@@ -86,7 +86,7 @@ row_detail <- function(index) {
 }
 ```
 
-```{r}
+```{r filters}
 #| column: margin
 
 tagList(
@@ -115,7 +115,7 @@ Kód na Githubu: <br />[petrbouchal/esif-evaluace](https://github.com/petrboucha
 [Všechna data (.xlsx)](evaluace.xlsx) <br /> (co řádek, to odkaz na výstup)
 :::
 
-```{r}
+```{r table-build}
 tbl <- reactable(data, minRows = 1, filterable = TRUE, searchable = TRUE,  
                  # groupBy = c("eval_nazev", "eval_popis"), 
                  compact = TRUE,
@@ -210,7 +210,7 @@ Toto je alternativní rozhraní [knihovny evaluací ESI fondů](https://dotaceeu
 
 - V pravém sloupci zvolte, jaké evaluace a etapy chcete vidět v tabulce
 - Můžete textově filtrovat v tabulce
-  - nebo vyhledávat ve všech textech názvů a popisů etap a evaluací (ale ne výstypů)
+- nebo vyhledávat ve všech textech názvů a popisů etap a evaluací (ale ne výstypů)
 - V tabulce rozbalte tlačítkem ⦾ evaluaci
 - Následně opět tlačítkem ⦾ rozbalte detaily etapy - tam najdete i odkazy na výstupy
 
@@ -220,7 +220,7 @@ Etapy s nejčerstvějšími výstupy se zobrazují první, ale řazení můžete
 
 ::::
 
-```{r}
+```{r table-output}
 #| column: page-left
 div(class = "evaluace-tabulka-div",
     # h2(class = "title", "Evaluace 2014-2023"),
