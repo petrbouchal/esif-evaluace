@@ -14,6 +14,8 @@ format:
     theme: cosmo
     css: style.css
     toc: false
+    link-external-newwindow: true
+
 
 execute:
   echo: false
