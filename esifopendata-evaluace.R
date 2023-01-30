@@ -1,4 +1,9 @@
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(forcats)
+library(purrr)
+library(stringr)
+library(janitor)
 library(xml2)
 library(lubridate)
 library(writexl)
@@ -180,5 +185,5 @@ evals_for_table <- evals_all |>
   ungroup() |>
   select(-etapa_ukon_rok)
 
-write_rds(evals_for_table, "data-interim/evals_for_table.rds")
+saveRDS(evals_for_table, "data-interim/evals_for_table.rds")
 write_xlsx(evals_for_table |> unnest(odkazy), "evaluace.xlsx")
