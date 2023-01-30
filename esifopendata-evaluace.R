@@ -133,15 +133,11 @@ evals_all <- evals_df |>
                   eval_ma_etapy_ukoncene_txt = "Ne")) |>
   ungroup()
 
-write_rds(evals_all, "data-interim/evals_all.rds")
-
-write_rds(links_df, "data-interim/links.rds")
-write_rds(etapy_df, "data-interim/etapy.rds")
-write_rds(evals_df, "data-interim/evals.rds")
-
-
-etapy_df |> filter(etapa_kod == "10.003.01") |> select(starts_with("zamereni"))
-gt::gt(etapy_df[c("etapa_kod", "zamereni_vyber", "zamereni_popis")])
+# write_rds(evals_all, "data-interim/evals_all.rds")
+#
+# write_rds(links_df, "data-interim/links.rds")
+# write_rds(etapy_df, "data-interim/etapy.rds")
+# write_rds(evals_df, "data-interim/evals.rds")
 
 evals_for_table <- evals_all |>
   group_by(eval_kod) |>
