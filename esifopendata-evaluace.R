@@ -2,7 +2,6 @@ library(dplyr)
 library(tidyr)
 library(forcats)
 library(purrr)
-library(stringr)
 library(janitor)
 library(xml2)
 library(lubridate)
@@ -57,8 +56,8 @@ evals_df <- evals_list |>
   select(-name) |>
   distinct() |>
   rename(eval_id = id, eval_kod = kod, etapa_kod = etapa) |>
-  mutate(op_kod = ifelse(grepl("NOK", eval_kod), str_sub(eval_kod, 1, 3),
-                         str_sub(eval_kod, 1, 2))) |>
+  mutate(op_kod = ifelse(grepl("NOK", eval_kod), substr(eval_kod, 1, 3),
+                         substr(eval_kod, 1, 2))) |>
   left_join(cis_op, by = "op_kod")
 
 etapy_list <- eval %>%
@@ -127,7 +126,7 @@ evals_all <- evals_df |>
          eval_zamereni_popis = zamereni_popis) |>
   mutate(etapa_ukon_rok = year(etapa_ukon_datum),
          eval_lbl = paste(op_zkratka, " • ", eval_nazev),
-         eval_is_impact = str_detect(eval_typ_hledisko, "[Dd]opad"),
+         eval_is_impact = grepl("[Dd]opad", eval_typ_hledisko),
          eval_is_impact_txt = if_else(eval_is_impact, "Dopad/výsledky", "Jiná"),
          eval_ma_etapy_txt = if_else(eval_ma_etapy, "Ano", "Ne"),
          eval_ma_etapy_ukoncene_txt = if_else(eval_ma_etapy_ukoncene, "Ano", "Ne"),
