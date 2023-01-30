@@ -3,7 +3,10 @@ library(xml2)
 library(lubridate)
 library(writexl)
 
-ciselniky_xml <- read_xml("https://ms14opendata.mssf.cz/MatDat.xml")
+ciselniky_xml_url <- "https://ms14opendata.mssf.cz/MatDat.xml"
+ciselniky_xml_file <- file.path("data-input", "MatDat.xml")
+# download.file(ciselniky_xml_url, ciselniky_xml_file)
+ciselniky_xml <- read_xml(ciselniky_xml_file)
 
 cis_op_list <- ciselniky_xml |>
   xml_ns_strip() |>
