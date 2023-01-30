@@ -23,7 +23,7 @@ evals_all <- readRDS("data-interim/evals_for_table.rds")
 
 
 ```{r crosstalk}
-data <- SharedData$new(evals_all)
+data <- SharedData$new(evals_all, group = "evaltbldt")
 ```
 
 ```{r detail-fun}
