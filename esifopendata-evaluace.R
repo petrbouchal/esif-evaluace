@@ -7,6 +7,8 @@ library(xml2)
 library(lubridate)
 library(writexl)
 
+options(timeout = 300)
+
 ciselniky_xml_url <- "https://ms14opendata.mssf.cz/MatDat.xml"
 ciselniky_xml_file <- file.path("data-input", "MatDat.xml")
 # download.file(ciselniky_xml_url, ciselniky_xml_file)
