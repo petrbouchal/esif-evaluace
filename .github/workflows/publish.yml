@@ -4,7 +4,7 @@ on:
     branches: main
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '0 4 * * *'
+    - cron:  '12 16 * * *'
 
 name: Quarto Publish
 
