@@ -1,0 +1,181 @@
+.crosstalk-input .checkbox input[type="checkbox"], .crosstalk-input .checkbox-inline input[type="checkbox"] {
+  /* position: relative; */
+}
+
+.crosstalk-input {
+  background-color: whitesmoke;
+}
+
+.crosstalk-input-slider {
+  /* margin: 0 10px 0 10px; */
+}
+
+#quarto-margin-sidebar {
+  background-color: whitesmoke;
+  margin: -20px;
+  padding: 0 0 1200px 0;
+
+}
+
+
+.popis-etapy-box {
+  padding: 30px;
+  padding-top: 15px;
+  margin: 20px;
+  background: hsl(213, 20%, 99%);
+  box-shadow: inset 0 1px 3px #dbdbdb;
+}
+
+.popis-etapy-text {
+  margin-top: 5px;
+}
+
+summary::marker {
+
+  padding-right: 30px;
+
+}
+
+summary {
+  font-weight: bold;
+}
+
+
+.popis-evaluace > details {
+  margin-bottom: 0;
+}
+
+.popis-evaluace-box {
+  padding: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 20px;
+  background: hsl(213, 20%, 99%);
+  border-radius: 10px;
+  box-shadow: inset 0 1px 3px #dbdbdb;
+}
+
+.detail-label {
+  font-weight: normal;
+}
+
+.detail-heading {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.popis-evaluace {
+  margin-top: 10px;
+}
+
+.zamereni-evaluace {
+  margin-top: 10px;
+}
+
+.rt-search {
+  align-self: flex-start;
+  width: 30%;
+  margin: 5px 5px 5px 5px;
+  padding: 5px;
+  border-width: 2px;
+  border-color: darkblue;
+}
+
+.rt-expander {
+  padding: 0 0 0 0;
+  width: 15px;
+}
+
+.rt-expander::after{
+  color: darkblue;
+  content: "⦾";
+  font-size: 12pt;
+  border: none;
+  position: relative;
+  width: 0;
+  height: 0;
+  left: -10%;
+  cursor: pointer;
+}
+
+.rt-expander-open::after{
+  color: darkblue;
+  content: "⦿";
+  font-size: 12pt;
+  border: none;
+  position: relative;
+  width: 0;
+  height: 0;
+  left: -10%;
+  cursor: pointer;
+}
+
+summary::marker {
+  color: darkblue;
+}
+
+.detail-label {
+  margin: 1.25rem 0 0.25rem;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.detail-header {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.detail-title {
+  margin-left: 1rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.evaluace-tabulka-div {
+  font-family: IBM Plex Sans, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.title {
+  font-size: 1.5rem;
+}
+
+.evaluace-tabulka {
+  background: white;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  border: 1px solid hsl(213, 33%, 93%);
+  border-radius: 4px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+.link > a {
+  margin-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: darkblue;
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+}
+
+.link {
+  list-style-type: none;
+  margin-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.header {
+  background-color: whitesmoke;
+  border-bottom-color: hsl(213, 33%, 93%);
+  border-bottom-width: 1px;
+  color: black);
+}
+
+.header[aria-sort]:hover,
+.header[aria-sort]:focus {
+  color: darkblue;
+}
