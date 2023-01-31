@@ -197,7 +197,7 @@ tbl <- reactable(data, minRows = 1, filterable = TRUE, searchable = TRUE,
 ::: {.callout-tip collapse="true"}
 ## Co tu je a jak to použít
 
-Toto je alternativní rozhraní [knihovny evaluací ESI fondů](https://dotaceeu.cz/cs/evropske-fondy-v-cr/narodni-organ-pro-koordinaci/evaluace/knihovna-evaluaci?Text=&Category1=0&Category2=0&Category3=0&Category4=0&Category5=0).
+Toto je alternativní rozhraní [knihovny evaluací ESI fondů](https://dotaceeu.cz/cs/evropske-fondy-v-cr/narodni-organ-pro-koordinaci/evaluace/knihovna-evaluaci?Text=&Category1=0&Category2=0&Category3=0&Category4=0&Category5=0). Aktualizuje se jednou denně z [dat MMR](https://ms14opendata.mssf.cz/).
 
 #### Co tu je 
 
