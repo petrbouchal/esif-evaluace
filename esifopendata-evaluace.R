@@ -31,6 +31,7 @@ cis_op <- tibble(data = cis_op_list) |>
 
 download.file("https://www.dropbox.com/s/20ojei6kw681o5m/file.xml?dl=1", "data-input/Evaluace.xml")
 print(file.size("data-input/Evaluace.xml"))
+print("downloaded")
 
 # prj <- download.file("https://ms14opendata.mssf.cz/SeznamProjektu.xml", "data-input/SeznamProjektu.xml")
 eval <- read_xml("data-input/Evaluace.xml")
