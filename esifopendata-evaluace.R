@@ -14,6 +14,11 @@ ciselniky_xml_file <- file.path("data-input", "MatDat.xml")
 # download.file(ciselniky_xml_url, ciselniky_xml_file)
 ciselniky_xml <- read_xml(ciselniky_xml_file)
 
+download.file("https://www.dotaceeu.cz/Dotace/media/MMR-Dotace/footerCZ-EU.svg", "a.svg")
+download.file("https://ms14opendata.mssf.cz", "b.html")
+readLines("b.html", n = 10) |> print()
+download.file("https://ms14opendata.mssf.cz/Evaluace.zip", "c.zip")
+
 cis_op_list <- ciselniky_xml |>
   xml_ns_strip() |>
   xml_find_all("//HL") |>
