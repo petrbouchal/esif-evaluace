@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Check local IP
-        run: "ifconfig | grep inet"
+        run: "curl https://api.ipify.org"
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
