@@ -14,11 +14,6 @@ ciselniky_xml_file <- file.path("data-input", "MatDat.xml")
 # download.file(ciselniky_xml_url, ciselniky_xml_file)
 ciselniky_xml <- read_xml(ciselniky_xml_file)
 
-download.file("https://www.dotaceeu.cz/Dotace/media/MMR-Dotace/footerCZ-EU.svg", "a.svg")
-download.file("https://www.mssf.cz/images/bg-pan.gif", "b.html")
-readLines("b.html", n = 10) |> print()
-download.file("https://ms14opendata.mssf.cz/Evaluace.zip", "c.zip")
-
 cis_op_list <- ciselniky_xml |>
   xml_ns_strip() |>
   xml_find_all("//HL") |>
@@ -34,7 +29,9 @@ cis_op <- tibble(data = cis_op_list) |>
   select(-data) |>
   add_row(tibble(op_zkratka = "NOK (MMR)", op_nazev = "Národní orgán pro koordinaci"), op_kod = "NOK")
 
-eval <- download.file("https://ms14opendata.mssf.cz/Evaluace.xml", "data-input/Evaluace.xml")
+download.file("https://www.dropbox.com/s/20ojei6kw681o5m/file.xml?dl=1", "data-input/Evaluace.xml")
+print(file.size("data-input/Evaluace.xml"))
+
 # prj <- download.file("https://ms14opendata.mssf.cz/SeznamProjektu.xml", "data-input/SeznamProjektu.xml")
 eval <- read_xml("data-input/Evaluace.xml")
 # prj <- read_xml("~/data-input/SeznamProjektu.xml")
