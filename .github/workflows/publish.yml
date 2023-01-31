@@ -10,7 +10,7 @@ name: Quarto Publish
 
 jobs:
   build-deploy:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     permissions:
       contents: write
     steps:
@@ -19,9 +19,6 @@ jobs:
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: Install dependencies
-        run: "sudo apt-get install libcurl4-openssl-dev"
 
       - name: Install R
         uses: r-lib/actions/setup-r@v2
