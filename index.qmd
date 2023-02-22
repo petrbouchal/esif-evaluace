@@ -12,6 +12,7 @@ library(reactable)
 library(crosstalk)
 library(htmltools)
 library(tidyr)
+library(fontawesome)
 
 source("utils.R")
 ```
@@ -25,6 +26,59 @@ evals_all <- readRDS("data-interim/evals_for_table.rds")
 ```{r crosstalk}
 data <- SharedData$new(evals_all, group = "evaltbldt")
 ```
+
+```{r}
+get_base_name <- function(filename) {
+  str_remove_all(filename, "\\.[a-zA-Z]{1,4}$|") |> str_replace_all("_", " ")
+}
+
+is_english <- function(filename) {
+  filename_orig <- filename
+  filename <- tolower(filename)
+  
+  grepl("interim|evaluation|inception|report|summary|eng", filename, ignore.case = TRUE) | grepl("AJ|EN", filename_orig)
+}
+
+is_kraj <- function(filename) {
+  filename_orig <- filename
+  filename <- tolower(filename)
+  
+  grepl("kraj|regio", filename, ignore.case = TRUE)
+}
+
+get_icons <- function(filename) {
+  
+  filename_orig <- filename
+  filename <- tolower(filename)
+  
+  iconname <- case_when(grepl("příloh|priloh", filename) ~ "paperclip",
+                        grepl("závěr|zaver", filename) ~ "flag-checkered",
+                        grepl("průběž|interim|prubez", filename) ~ "spinner",
+                        grepl("smlouva", filename) ~ "section",
+                        grepl("vstup|inceptio", filename) ~ "circle-play",
+                        grepl("csv|xls", filename) ~ "file-csv",
+                        grepl("ppt|prezentace", filename) ~ "file-powerpoint",
+                        grepl("shrnutí|summary|shrnuti|manag|manaž|manaz", filename) ~ "business-time",
+                        grepl("letá|leta|graf", filename) ~ "file-invoice",
+                        grepl("případ|pripad", filename) ~ "location-crosshairs",
+                        grepl("teorie změn|teorie zmen", filename) ~ "diagram-project",
+                        grepl("doporučení|recommend", filename) ~ "list-check",
+                        grepl("\\.doc", filename) ~ "file-word",
+                        grepl("\\.pdf", filename) ~ "file-pdf",
+                        TRUE ~ "file"
+  )
+  
+  is_english <- is_english(filename_orig)
+  
+  is_contract <- grepl("smlouva", filename, ignore.case = TRUE)
+  htmltools::tagList(
+    # if(is_english) htmltools::tagList(fontawesome::fa_i("globe"), tags$span(" ")) else NULL,
+    if(!is.na(iconname)) fa_i(iconname),
+    tags$span(" ")
+  )
+}
+```
+
 
 ```{r detail-fun}
 row_detail <- function(index) {
@@ -73,10 +127,13 @@ row_detail <- function(index) {
         tags$div(
           
           purrr::pmap(list(odkazy$file_url, odkazy$file_text, odkazy$link), function(x, y, link) 
-            if(is.na(x)) NULL else tags$div(tags$a(y, href = x), 
-                                           if(!is.na(link)) tagList(tags$span(" + "), 
-                                                                    tags$a("dodatečný odkaz", href = link)),
-                                           class = "link"))
+            if(is.na(x)) NULL else tags$div(get_icons(y),
+                                            tags$a(get_base_name(y), href = x), 
+                                            if(is_english(y)) tagList(tags$span(" "), fa_i("globe")),
+                                            if(is_kraj(y)) tagList(tags$span(" "), fa_i("map-location-dot")),
+                                            if(!is.na(link)) tagList(tags$span(" + "), 
+                                                                     tags$a("dodatečný odkaz", href = link)),
+                                            class = "link"))
         )
       )
     } else {NULL}
