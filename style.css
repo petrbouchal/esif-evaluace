@@ -153,12 +153,17 @@ summary::marker {
 
 .link > a {
   margin-top: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
   background-color: darkblue;
-  border-radius: 10px;
+  border-radius: 5px;
   color: white;
   text-decoration: none;
+}
+
+.link > i {
+  background-color: white;
+  color: darkblue;
 }
 
 .link {
@@ -166,6 +171,8 @@ summary::marker {
   margin-top: 5px;
   padding-left: 10px;
   padding-right: 10px;
+  color: white;
+  text-decoration: none;
 }
 
 .header {
