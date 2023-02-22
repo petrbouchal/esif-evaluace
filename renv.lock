@@ -144,6 +144,17 @@
       "Hash": "77bd60a6157420d4ffa93b27cf6a58b8",
       "Requirements": []
     },
+    "fontawesome": {
+      "Package": "fontawesome",
+      "Version": "0.4.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c5a628c2570aa86a96cc6ef739d8bfda",
+      "Requirements": [
+        "htmltools",
+        "rlang"
+      ]
+    },
     "forcats": {
       "Package": "forcats",
       "Version": "0.5.2",
