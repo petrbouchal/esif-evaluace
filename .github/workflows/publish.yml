@@ -36,6 +36,9 @@ jobs:
       - name: Get and process data
         run: 'Rscript esifopendata-evaluace.R'
 
+      - name: Generate eval pages
+        run: 'Rscript render-pereval-pages.R'
+
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
         with:

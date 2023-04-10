@@ -6,6 +6,7 @@ date: today
 
 ```{r setup}
 library(dplyr)
+library(glue)
 library(forcats)
 library(stringr)
 library(reactable)
@@ -21,64 +22,14 @@ source("utils.R")
 evals_all <- readRDS("data-interim/evals_for_table.rds")
 ```
 
+```{r}
+source("etapa_display_fns.R")
+```
 
 
 ```{r crosstalk}
 data <- SharedData$new(evals_all, group = "evaltbldt")
 ```
-
-```{r}
-get_base_name <- function(filename) {
-  str_remove_all(filename, "\\.[a-zA-Z]{1,4}$|") |> str_replace_all("_", " ")
-}
-
-is_english <- function(filename) {
-  filename_orig <- filename
-  filename <- tolower(filename)
-  
-  grepl("interim|evaluation|inception|report|summary|eng", filename, ignore.case = TRUE) | grepl("AJ|EN", filename_orig)
-}
-
-is_kraj <- function(filename) {
-  filename_orig <- filename
-  filename <- tolower(filename)
-  
-  grepl("kraj|regio", filename, ignore.case = TRUE)
-}
-
-get_icons <- function(filename) {
-  
-  filename_orig <- filename
-  filename <- tolower(filename)
-  
-  iconname <- case_when(grepl("příloh|priloh", filename) ~ "paperclip",
-                        grepl("závěr|zaver", filename) ~ "flag-checkered",
-                        grepl("průběž|interim|prubez", filename) ~ "spinner",
-                        grepl("smlouva", filename) ~ "section",
-                        grepl("vstup|inceptio", filename) ~ "circle-play",
-                        grepl("csv|xls", filename) ~ "table",
-                        grepl("ppt|prezentace", filename) ~ "file-powerpoint",
-                        grepl("shrnutí|summary|shrnuti|manag|manaž|manaz", filename) ~ "business-time",
-                        grepl("letá|leta|graf", filename) ~ "file-invoice",
-                        grepl("případ|pripad", filename) ~ "magnifying-glass",
-                        grepl("teorie změn|teorie zmen", filename) ~ "diagram-project",
-                        grepl("doporučení|recommend", filename) ~ "list-check",
-                        grepl("\\.doc", filename) ~ "file-word",
-                        grepl("\\.pdf", filename) ~ "file-pdf",
-                        TRUE ~ "file"
-  )
-  
-  is_english <- is_english(filename_orig)
-  
-  is_contract <- grepl("smlouva", filename, ignore.case = TRUE)
-  htmltools::tagList(
-    # if(is_english) htmltools::tagList(fontawesome::fa_i("globe"), tags$span(" ")) else NULL,
-    if(!is.na(iconname)) fa_i(iconname),
-    tags$span(" ")
-  )
-}
-```
-
 
 ```{r detail-fun}
 row_detail <- function(index) {
@@ -105,6 +56,9 @@ row_detail <- function(index) {
     select(odkazy) |> 
     unnest(odkazy)
   
+  eval_slug <- str_sub(dt$etapa_kod, 1, 7) |> 
+    str_remove("\\.$") |> str_replace_all("\\.", "\\-")
+  
   rtrn <- tagList(
     tags$div(
       class = "popis-evaluace-box",
@@ -113,7 +67,8 @@ row_detail <- function(index) {
                                    if(!is.na(dt$eval_typ_hledisko)) dt$eval_typ_hledisko else "nezadáno"),
                             class = "zamereni-evaluace"), 
                    tags$summary(paste("Detail evaluace: ", dt$eval_nazev)),
-                   style = "margin-bottom: 0px")
+                   style = "margin-bottom: 0px"),
+      tags$a("Link na evaluaci", href = glue("eval_{eval_slug}.html")),
     ),
     if(any(!is.na(dt$etapa_nazev))) {
       

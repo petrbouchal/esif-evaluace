@@ -1,0 +1,52 @@
+---
+title: "Evaluace"
+editor: source
+format: 
+  html: 
+    toc: true
+    toc-expanded: true
+    toc-depth: 4
+params:
+  eval_kod: "03.046"
+---
+
+# Blah
+
+```{r setup}
+library(dplyr)
+library(stringr)
+library(htmltools)
+library(purrr)
+library(tidyr)
+library(ptrr)
+library(fontawesome)
+```
+
+```{r fns}
+source("etapa_display_fns.R")
+```
+
+```{r data}
+data <- readRDS("data-interim/evals_for_table.rds") |> 
+  mutate(eval_kod = str_sub(etapa_kod, 1, 7) |> str_remove("\\.$")) |> 
+  filter(eval_kod == params$eval_kod)
+```
+
+## Evaluace
+
+```{r eval-block}
+eval_for_page(data)
+```
+
+```{r etapy-prep}
+etapy_list <- data |> group_by(etapa_kod) |> group_split()
+list_of_etapa_divs <- map(etapy_list, etapa_for_page)
+etapy_taglist <- do.call(tagList, list_of_etapa_divs)
+```
+
+## Etapy
+
+```{r etapy-block, results='markup'}
+etapy_taglist
+```
+
