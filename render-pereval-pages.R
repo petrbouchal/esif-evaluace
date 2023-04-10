@@ -32,7 +32,7 @@ render_single_eval <- function(eval_kod, file) {
 # evals_out <- map_chr(unique(dat$eval_kod)[1], render_single_eval, "single-eval-template.qmd")
 
 # fs::dir_delete("evals")
-evals_out <- map_chr(unique(dat$eval_kod)[1], render_single_eval, "single-eval-template.qmd")
+evals_out <- map_chr(unique(dat$eval_kod), render_single_eval, "single-eval-template.qmd")
 plan(sequential)
 # fs::dir_delete("evals/docs")
 unique(dat$eval_kod)[5]
