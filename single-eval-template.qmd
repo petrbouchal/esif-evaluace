@@ -10,8 +10,6 @@ params:
   eval_kod: "03.046"
 ---
 
-# Blah
-
 ```{r setup}
 library(dplyr)
 library(stringr)
