@@ -68,7 +68,7 @@ row_detail <- function(index) {
                             class = "zamereni-evaluace"), 
                    tags$summary(paste("Detail evaluace: ", dt$eval_nazev)),
                    style = "margin-bottom: 0px"),
-      tags$a("Link na evaluaci", href = glue("eval_{eval_slug}.html")),
+      tags$a("Stránka evaluace", href = glue("eval_{eval_slug}.html")),
     ),
     if(any(!is.na(dt$etapa_nazev))) {
       

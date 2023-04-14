@@ -54,13 +54,11 @@ eval_for_page <- function(data) {
   rtrn <- tagList(
     tags$div(
       class = "popis-evaluace-box",
-      tags$details(tags$div(tags$span("Popis: "), dt$eval_popis, class = "popis-evaluace"),
-                   tags$div(paste0("Zaměření evaluace: ",
-                                   if(!is.na(dt$eval_typ_hledisko)) dt$eval_typ_hledisko else "nezadáno"),
-                            class = "zamereni-evaluace"),
-                   tags$summary(paste("Detail evaluace: ", dt$eval_nazev)),
-                   style = "margin-bottom: 0px")
-    )
+      tags$div(tags$span("Popis: "), dt$eval_popis, class = "popis-evaluace"),
+      tags$div(paste0("Zaměření evaluace: ",
+                      if(!is.na(dt$eval_typ_hledisko)) dt$eval_typ_hledisko else "nezadáno"),
+               class = "zamereni-evaluace"),
+      style = "margin-bottom: 0px")
   )
 
   return(rtrn)
@@ -93,26 +91,26 @@ etapa_for_page <- function(data) {
   if(any(!is.na(dt$etapa_nazev))) {
     rtrn <- tagList(
       tags$section(id = dt$etapa_kod, class = "level3",
-        tags$h3(dt$etapa_nazev, `data-anchor-id` = dt$etapa_kod),
-        tags$div(
-          class = "popis-etapy-box",
-          eval_field("Datum dokončení: ", if(!is.na(dt$etapa_ukon_datum)) format_date_human(dt$etapa_ukon_datum) else NA),
-          eval_block("Popis etapy", dt$etapa_popis),
-          eval_block("Komentář", dt$etapa_komentar),
-          if(nrow(odkazy) > 1) tags$div("Zprávy ke stažení", class = "detail-label") else NULL,
-          tags$div(
+                   tags$h3(dt$etapa_nazev, `data-anchor-id` = dt$etapa_kod),
+                   tags$div(
+                     class = "popis-etapy-box",
+                     eval_field("Datum dokončení: ", if(!is.na(dt$etapa_ukon_datum)) format_date_human(dt$etapa_ukon_datum) else NA),
+                     eval_block("Popis etapy", dt$etapa_popis),
+                     eval_block("Komentář", dt$etapa_komentar),
+                     if(nrow(odkazy) > 1) tags$div("Zprávy ke stažení", class = "detail-label") else NULL,
+                     tags$div(
 
-            purrr::pmap(list(odkazy$file_url, odkazy$file_text, odkazy$link), function(x, y, link)
-              if(is.na(x)) NULL else tags$div(tags$a(tags$span(get_icons(y), style = "display: inline-block; width: 20px;"),
-                                                     href = x, style = "background-color: white; color: darkblue;"),
-                                              tags$a(tags$span(get_base_name(y)), href = x),
-                                              if(is_english(y)) tagList(tags$span(" "), fa_i("globe")),
-                                              if(is_kraj(y)) tagList(tags$span(" "), fa_i("map-location-dot", class = "link")),
-                                              if(!is.na(link)) tagList(tags$span(" + "),
-                                                                       tags$a("dodatečný odkaz", href = link)),
-                                              class = "link"))
-          )
-        ))
+                       purrr::pmap(list(odkazy$file_url, odkazy$file_text, odkazy$link), function(x, y, link)
+                         if(is.na(x)) NULL else tags$div(tags$a(tags$span(get_icons(y), style = "display: inline-block; width: 20px;"),
+                                                                href = x, style = "background-color: white; color: darkblue;"),
+                                                         tags$a(tags$span(get_base_name(y)), href = x),
+                                                         if(is_english(y)) tagList(tags$span(" "), fa_i("globe")),
+                                                         if(is_kraj(y)) tagList(tags$span(" "), fa_i("map-location-dot", class = "link")),
+                                                         if(!is.na(link)) tagList(tags$span(" + "),
+                                                                                  tags$a("dodatečný odkaz", href = link)),
+                                                         class = "link"))
+                     )
+                   ))
     )
 
   } else {rtrn <- tagList(NULL)}
