@@ -30,7 +30,7 @@ data <- readRDS("data-interim/evals_for_table.rds") |>
   filter(eval_kod == params$eval_kod)
 ```
 
-([zpět na seznam evaluací](../index.html))
+([zpět na seznam evaluací](/index.html))
 
 ## Evaluace
 
