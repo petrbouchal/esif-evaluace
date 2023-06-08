@@ -114,14 +114,6 @@
       "Hash": "3177a5a16c243adc199ba33117bd9657",
       "Requirements": []
     },
-    "codetools": {
-      "Package": "codetools",
-      "Version": "0.2-18",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "019388fc48e48b3da0d3a76ff94608a8",
-      "Requirements": []
-    },
     "colorspace": {
       "Package": "colorspace",
       "Version": "2.0-3",
@@ -332,34 +324,6 @@
       "Hash": "7c89603d81793f0d5486d91ab1fc6f1d",
       "Requirements": []
     },
-    "furrr": {
-      "Package": "furrr",
-      "Version": "0.3.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "da7a4c32196cb2262a41dd5a25d486ff",
-      "Requirements": [
-        "future",
-        "globals",
-        "lifecycle",
-        "purrr",
-        "rlang",
-        "vctrs"
-      ]
-    },
-    "future": {
-      "Package": "future",
-      "Version": "1.32.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "c68517cf2f78be4ea86e140b8598a4ca",
-      "Requirements": [
-        "digest",
-        "globals",
-        "listenv",
-        "parallelly"
-      ]
-    },
     "gdtools": {
       "Package": "gdtools",
       "Version": "0.3.0",
@@ -466,16 +430,6 @@
       "Repository": "CRAN",
       "Hash": "ab08ac61f3e1be454ae21911eb8bc2fe",
       "Requirements": []
-    },
-    "globals": {
-      "Package": "globals",
-      "Version": "0.16.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "baa9585ab4ce47a9f4618e671778cc6f",
-      "Requirements": [
-        "codetools"
-      ]
     },
     "glue": {
       "Package": "glue",
@@ -727,14 +681,6 @@
         "rlang"
       ]
     },
-    "listenv": {
-      "Package": "listenv",
-      "Version": "0.9.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "4fbd3679ec8ee169ba28d4b1ea7d0e8f",
-      "Requirements": []
-    },
     "lubridate": {
       "Package": "lubridate",
       "Version": "1.9.0",
@@ -832,14 +778,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "481428983c19a7c443f7ea1beff0a2de",
-      "Requirements": []
-    },
-    "parallelly": {
-      "Package": "parallelly",
-      "Version": "1.35.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "1cf5a54cfc5dcb0b84037acfd93cbca7",
       "Requirements": []
     },
     "pillar": {
@@ -999,10 +937,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "1.0.6",
+      "Version": "1.1.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "4ed1f8336c8d52c3e750adcdc57228a7",
+      "Hash": "a85c767b55f0bf9b7ad16c6d7baee5bb",
       "Requirements": []
     },
     "rmarkdown": {
