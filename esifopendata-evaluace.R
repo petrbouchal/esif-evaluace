@@ -11,7 +11,7 @@ options(timeout = 300)
 
 ciselniky_xml_url <- "https://ms14opendata.mssf.cz/MatDat.xml"
 ciselniky_xml_file <- file.path("data-input", "MatDat.xml")
-# download.file(ciselniky_xml_url, ciselniky_xml_file)
+download.file(ciselniky_xml_url, ciselniky_xml_file)
 ciselniky_xml <- read_xml(ciselniky_xml_file)
 
 cis_op_list <- ciselniky_xml |>
@@ -29,7 +29,8 @@ cis_op <- tibble(data = cis_op_list) |>
   select(-data) |>
   add_row(tibble(op_zkratka = "NOK (MMR)", op_nazev = "Národní orgán pro koordinaci"), op_kod = "NOK")
 
-download.file("https://www.dropbox.com/s/20ojei6kw681o5m/file.xml?dl=1", "data-input/Evaluace.xml")
+# download.file("https://www.dropbox.com/s/20ojei6kw681o5m/file.xml?dl=1", "data-input/Evaluace.xml")
+download.file("https://ms14opendata.mssf.cz/Evaluace.xml", "data-input/Evaluace.xml")
 print(file.size("data-input/Evaluace.xml"))
 print("downloaded")
 
