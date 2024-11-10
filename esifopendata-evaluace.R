@@ -29,7 +29,7 @@ cis_op <- tibble(data = cis_op_list) |>
   select(-data) |>
   add_row(tibble(op_zkratka = "NOK (MMR)", op_nazev = "Národní orgán pro koordinaci"), op_kod = "NOK")
 
-download.file("https://www.dropbox.com/s/20ojei6kw681o5m/file.xml?dl=1", "data-input/Evaluace.xml")
+download.file("https://ms14opendata.mssf.cz/Evaluace.xml", "data-input/Evaluace.xml")
 print(file.size("data-input/Evaluace.xml"))
 print("downloaded")
 
